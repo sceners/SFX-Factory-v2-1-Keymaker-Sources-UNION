@@ -1,0 +1,117 @@
+SFXFactory v2.1 Keymaker Open Source Code by Egis [CORE/UNiON]
+==============================================================
+
+This is my second contribution to those who are riddled by how to write RSA
+keymaker problems.
+
+1. RSA Explaination
+-------------------
+Maybe you have heard that, if you want to break a RSA key, you should factorize
+the public key. But few knows how RSA works, so even he is told the public key
+and factorizes it, he will not know how to write a keymaker.
+
+RSA works as follows: take two large primes, p and q, and compute their product
+n = pq; n is called the modulus. Choose a number, e, less than n and relatively
+prime to (p-1)(q-1), which means e and (p-1)(q-1) have no common factors except
+1. Find another number d such that (ed - 1) is divisible by (p-1)(q-1). The
+values e and d are called the public and private exponents, respectively. The
+public key is the pair (n, e); the private key is (n, d). The factors p and q
+may be kept with the private key, or destroyed.
+
+Encryption: c = ( m ^ e ) % n
+Decryption: m = ( c ^ d ) % n
+
+Example:
+
+Now we choose p=5, q=7, so n=5*7=35. And we choose e=11.
+
+Since (p-1)(q-1)=4*6=24, we get d=11, for (11*11-1)%24=0. Note: d is not
+necessarily equal to e.  :-)
+
+We encrypt a number, m=4, with:
+
+c = ( 4 ^ 11 ) % 35 = 9
+
+Here, m=4, n=35 and e=11 are the public part.
+
+When we want to decrypt, we do:
+
+m = ( 9 ^ 11 ) % 35 = 4
+
+If you know how RSA works, it will not be hard to find n and e by yourself,
+and factorize n then try to find d, so you will be able to write your own
+keymaker.
+
+I offer SFXFactory v2.1 keymaker to provide you a live example of a RSA
+keymaker. Personally, I don't think SFXFactory is a good software for it
+is too big and slow to be a SFX creator.
+
+Maybe this will excite you: SFXFactory is from the same author of WinACE, an
+excellent archiver, which also uses RSA. If you want to write its keymaker,
+you can trace it step by step to find yourself what are n and e.
+
+MIRACL comes with a good factorizer named FACTOR.EXE, but it only accepts
+decimal numbers, so you should first try to convert the hexadecimal n to
+decimal, and factorize it.
+
+Another problem is how to find d, since d is not unique and there is no direct
+method to compute it. MIRACL also offers some functions to get d.
+
+I prefer SSLeay, another cryptography library in both C and C++. It is well
+organized. But it doesn't bring you a factorizer.
+
+In this keymaker, I don't include my BigNum library source code for it is
+actually lame and slow and unoptimized. Try to use MIRACL or SSLeay.
+
+If you want to do RSA keymaker, I have to warn you, that the main difficulty
+of a RSA keymaker is not the factorization. You will be probably in a trouble
+to recognize if a program uses RSA proction, and to find what is n and e.
+
+2. What is Radix-23?
+--------------------
+Another problem is, SFXFactory first decodes your registration code. So what
+is the decoding algorithm?
+
+I call it Radix-23. What is it? Well, we usually call Radix-10 decimal, call
+Radix-16 hexadecimal. So now you maybe understand what is Radix-23.
+
+Hexadecimal has 16 numbers: 0~9 and A~F. Similarly, Radix-23 has 23 numbers.
+We can freely choose what they are. The author of SFXFactory chooses the
+following characters:
+
+34679ACDEFHKLMNPQRSTWXY.
+
+How we convert a decimal number to a hexadecimal number? We do as follows:
+
+            12345 / 16 = 771 ... 9
+	    771   / 16 = 48  ... 3
+	    48    / 16 = 3   ... 0
+	    3     / 16 = 0   ... 3
+
+So, 12345 = 0x3039. We convert decimal to Radix-23 the same way:
+
+            12345 / 23 = 536 ... 17 (R)
+	    536   / 23 = 23  ... 7  (D)
+	    23    / 23 = 1   ... 0  (3)
+	    1     / 23 = 0   ... 1  (4)
+
+So, 12345 = 43DR(23). In the keymaker source, UUEncode implements it. But it
+is not UUEncode, of course.
+
+3. Craps
+--------
+I just don't care if you quote my source code into your keymaker. Since there
+are lots lamers who traces my keymaker and write a new one. Why don't I offer
+the source code for your easier stealing?  :)
+
+OK, I've promised writing a tutorial about RSA cracking. Here it is. And it is
+my last tutorial on RSA.
+
+4. Last Words
+-------------
+Do not bother me about this piece of words. This is only a combination of
+nonsence single words, I don't know what it means.  :)
+
+=============
+Best regards,
+Egis [CORE/UNiON]
